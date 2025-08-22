@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Quiz Redirect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-box {
+            border: 2px solid #3498db;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Quiz System Debug</h1>
+    
+    <div class="test-box">
+        <h2>Test 1: Check if quiz files exist</h2>
+        <button onclick="testFile('pythonquiz.html')">Test pythonquiz.html</button>
+        <button onclick="testFile('dsquiz.html')">Test dsquiz.html</button>
+        <button onclick="testFile('oopmquiz.html')">Test oopmquiz.html</button>
+        <button onclick="testFile('cppquiz.html')">Test cppquiz.html</button>
+        <div id="file-test-result"></div>
+    </div>
+    
+    <div class="test-box">
+        <h2>Test 2: Check sessionStorage</h2>
+        <button onclick="testSessionStorage()">Test sessionStorage</button>
+        <div id="storage-test-result"></div>
+    </div>
+    
+    <div class="test-box">
+        <h2>Test 3: Manual Redirect</h2>
+        <button onclick="window.location.href='cppquiz.html'">Go directly to cppquiz.html</button>
+    </div>
+
+    <script>
+        function testFile(filename) {
+            fetch(filename)
+                .then(response => {
+                    if (response.status === 200) {
+                        document.getElementById('file-test-result').innerHTML = 
+                            `<p class="success">✓ ${filename} exists and is accessible</p>`;
+                    } else {
+                        document.getElementById('file-test-result').innerHTML = 
+                            `<p class="error">✗ ${filename} returned status: ${response.status}</p>`;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('file-test-result').innerHTML = 
+                        `<p class="error">✗ Error accessing ${filename}: ${error}</p>`;
+                });
+        }
+        
+        function testSessionStorage() {
+            // Set test values
+            sessionStorage.setItem('studentName', 'Test Student');
+            sessionStorage.setItem('rollNumber', 'TEST123');
+            sessionStorage.setItem('subject', 'C/CPP');
+            
+            // Retrieve and display
+            const name = sessionStorage.getItem('studentName');
+            const roll = sessionStorage.getItem('rollNumber');
+            const subject = sessionStorage.getItem('subject');
+            
+            document.getElementById('storage-test-result').innerHTML = `
+                <p>Student Name: ${name}</p>
+                <p>Roll Number: ${roll}</p>
+                <p>Subject: ${subject}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
