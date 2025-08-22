@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures Quiz - Baderia Global Institute</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 700px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a2a6c 0%, #3498db 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .student-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .info-item {
+            margin: 5px 15px;
+            font-size: 16px;
+        }
+        
+        .info-item span {
+            font-weight: 600;
+            color: #1a2a6c;
+        }
+        
+        .quiz-info {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .quiz-info-item {
+            text-align: center;
+        }
+        
+        .quiz-info-item span {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a2a6c;
+        }
+        
+        .question-container {
+            padding: 25px;
+        }
+        
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #343a40;
+            font-weight: 500;
+        }
+        
+        .question-meta {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        
+        .options {
+            list-style-type: none;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            background-color: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        #prev-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        #prev-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        #next-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        #next-btn:hover {
+            background-color: #0069d9;
+        }
+        
+        #submit-btn {
+            background-color: #28a745;
+            color: white;
+            display: none;
+        }
+        
+        #submit-btn:hover {
+            background-color: #218838;
+        }
+        
+        .result-container {
+            padding: 30px;
+            text-align: center;
+            display: none;
+        }
+        
+        .result-container h2 {
+            margin-bottom: 15px;
+            color: #343a40;
+        }
+        
+        .score {
+            font-size: 48px;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            margin-bottom: 25px;
+            font-size: 18px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, #1a2a6c 0%, #3498db 100%);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .weight-info {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .explanation {
+            background-color: #e7f5ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .explanation h3 {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 576px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .question {
+                font-size: 18px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .student-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-project-diagram"></i> Data Structures Quiz</h1>
+            <p>Test your Data Structures knowledge with weighted scoring</p>
+        </div>
+        
+        <div class="student-info">
+            <div class="info-item">Name: <span id="display-name">Student</span></div>
+            <div class="info-item">Roll No: <span id="display-roll">Unknown</span></div>
+            <div class="info-item">Subject: <span id="display-subject">Data Structures</span></div>
+        </div>
+        
+        <div class="quiz-info">
+            <div class="quiz-info-item">
+                <span id="question-number">1</span>
+                Question
+            </div>
+            <div class="quiz-info-item">
+                <span id="score">0</span>
+                Score
+            </div>
+            <div class="quiz-info-item">
+                <span id="time">05:00</span>
+                Time Left
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="question-container">
+            <h2 class="question" id="question"></h2>
+            <div class="question-meta" id="question-meta"></div>
+            <ul class="options" id="options"></ul>
+            
+            <div class="explanation" id="explanation">
+                <h3>Explanation:</h3>
+                <p id="explanation-text"></p>
+            </div>
+            
+            <div class="weight-info">
+                <i class="fas fa-info-circle"></i> Some questions may have multiple correct answers with different weightages.
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button id="prev-btn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+            <button id="submit-btn">Submit Quiz</button>
+        </div>
+        
+        <div class="result-container" id="result-container">
+            <h2>Quiz Completed!</h2>
+            <div class="score" id="final-score">0/10</div>
+            <p class="message" id="message">Great job! Keep learning!</p>
+        </div>
+    </div>
+
+    <script>
+        // Get student info from sessionStorage
+        const studentName = sessionStorage.getItem('studentName');
+        const rollNumber = sessionStorage.getItem('rollNumber');
+        const subject = sessionStorage.getItem('subject');
+        
+        // Display student info
+        document.getElementById('display-name').textContent = studentName || 'Student';
+        document.getElementById('display-roll').textContent = rollNumber || 'Unknown';
+        document.getElementById('display-subject').textContent = 'Data Structures';
+        
+        // Data Structures questions with multiple correct answers and weightages
+        const questions = [
+            {
+                question: "Which of the following are linear data structures?",
+                options: [
+                    { text: "Arrays", weight: 0.25 },
+                    { text: "Trees", weight: -0.25 },
+                    { text: "Linked Lists", weight: 0.25 },
+                    { text: "Graphs", weight: -0.25 },
+                    { text: "Stacks", weight: 0.25 }
+                ],
+                type: "multi",
+                
+            },
+            {
+                question: "Select the correct time complexities for operations:",
+                options: [
+                    { text: "Array access: O(1)", weight: 0.2 },
+                    { text: "Binary search: O(log n)", weight: 0.2 },
+                    { text: "Bubble sort: O(n²)", weight: 0.2 },
+                    { text: "Linked list insertion: O(1)", weight: 0.2 },
+                    { text: "HashMap search: O(n)", weight: -0.2 }
+                ],
+                type: "multi",
+                
+            },
+            {
+                question: "Which data structures use LIFO principle?",
+                options: [
+                    { text: "Stack", weight: 0.5 },
+                    { text: "Queue", weight: -0.5 },
+                    { text: "Deque", weight: -0.25 },
+                    { text: "Priority Queue", weight: -0.25 },
+                    { text: "Call Stack", weight: 0.5 }
+                ],
+                type: "multi",
+                
+            },
+            {
+                question: "What is the time complexity of DFS on a graph?",
+                options: [
+                    { text: "O(V + E)", weight: 1.0 },
+                    { text: "O(V × E)", weight: -0.5 },
+                    { text: "O(V²)", weight: -0.5 },
+                    { text: "O(log V)", weight: -0.5 }
+                ],
+                type: "single",
+                
+            },
+            {
+                question: "Which are properties of binary search trees?",
+                options: [
+                    { text: "Left child < Parent", weight: 0.25 },
+                    { text: "Right child > Parent", weight: 0.25 },
+                    { text: "All leaves same depth", weight: -0.25 },
+                    { text: "No duplicate values", weight: 0.25 },
+                    { text: "Balanced height", weight: -0.25 }
+                ],
+                type: "multi",
+                
+            }
+        ];
+
+        // DOM elements
+        const questionEl = document.getElementById('question');
+        const questionMetaEl = document.getElementById('question-meta');
+        const optionsEl = document.getElementById('options');
+        const questionNumberEl = document.getElementById('question-number');
+        const scoreEl = document.getElementById('score');
+        const timeEl = document.getElementById('time');
+        const progressEl = document.getElementById('progress');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultContainer = document.getElementById('result-container');
+        const finalScoreEl = document.getElementById('final-score');
+        const messageEl = document.getElementById('message');
+        const explanationEl = document.getElementById('explanation');
+        const explanationTextEl = document.getElementById('explanation-text');
+
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOptions = new Array(questions.length).fill(null).map(() => []);
+        let timeLeft = 300; // 5 minutes
+        let timer;
+
+        // Initialize quiz
+        function initQuiz() {
+            loadQuestion();
+            startTimer();
+            updateProgress();
+        }
+
+        // Load question
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            questionEl.textContent = question.question;
+            questionNumberEl.textContent = currentQuestion + 1;
+            
+            // Update question meta info
+            questionMetaEl.textContent = question.type === "multi" 
+                ? "Select ALL correct answers (multiple options can be correct)" 
+                : "Select ONE correct answer";
+            
+            optionsEl.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const li = document.createElement('li');
+                li.className = 'option';
+                
+                // Add option text
+                const textSpan = document.createElement('span');
+                textSpan.textContent = option.text;
+                li.appendChild(textSpan);
+                
+                li.setAttribute('data-index', index);
+                
+                // Check if this option is selected
+                if (selectedOptions[currentQuestion].includes(index)) {
+                    li.classList.add('selected');
+                }
+                
+                li.addEventListener('click', selectOption);
+                optionsEl.appendChild(li);
+            });
+            
+            // Show explanation if available
+            if (question.explanation) {
+                explanationEl.style.display = 'block';
+                explanationTextEl.textContent = question.explanation;
+            } else {
+                explanationEl.style.display = 'none';
+            }
+            
+            updateNavigation();
+        }
+
+        // Select option
+        function selectOption(e) {
+            const selectedIndex = parseInt(e.target.closest('.option').getAttribute('data-index'));
+            const question = questions[currentQuestion];
+            
+            if (question.type === "single") {
+                // For single select, clear previous selection
+                selectedOptions[currentQuestion] = [selectedIndex];
+                
+                // Update UI
+                const options = optionsEl.querySelectorAll('.option');
+                options.forEach(option => {
+                    option.classList.remove('selected');
+                    option.classList.remove('incorrect');
+                });
+                
+                e.target.closest('.option').classList.add('selected');
+                
+                // Calculate score for single select
+                const points = question.options[selectedIndex].weight;
+                if (points > 0) {
+                    score += points;
+                    scoreEl.textContent = score.toFixed(2);
+                }
+            } else {
+                // For multi select, toggle selection
+                const optionElement = e.target.closest('.option');
+                
+                if (selectedOptions[currentQuestion].includes(selectedIndex)) {
+                    // Deselect
+                    selectedOptions[currentQuestion] = selectedOptions[currentQuestion].filter(i => i !== selectedIndex);
+                    optionElement.classList.remove('selected');
+                    
+                    // Subtract points if previously selected
+                    const points = question.options[selectedIndex].weight;
+                    score -= points;
+                } else {
+                    // Select
+                    selectedOptions[currentQuestion].push(selectedIndex);
+                    optionElement.classList.add('selected');
+                    
+                    // Add points
+                    const points = question.options[selectedIndex].weight;
+                    score += points;
+                }
+                
+                scoreEl.textContent = score.toFixed(2);
+            }
+        }
+
+        // Update navigation buttons
+        function updateNavigation() {
+            prevBtn.style.display = currentQuestion === 0 ? 'none' : 'block';
+            nextBtn.style.display = currentQuestion === questions.length - 1 ? 'none' : 'block';
+            submitBtn.style.display = currentQuestion === questions.length - 1 ? 'block' : 'none';
+        }
+
+        // Next question
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+                updateProgress();
+            }
+        });
+
+        // Previous question
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+                updateProgress();
+            }
+        });
+
+        // Submit quiz
+        submitBtn.addEventListener('click', showResults);
+
+        // Show results
+        function showResults() {
+            clearInterval(timer);
+            document.querySelector('.question-container').style.display = 'none';
+            document.querySelector('.navigation').style.display = 'none';
+            document.querySelector('.quiz-info').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            
+            resultContainer.style.display = 'block';
+            finalScoreEl.textContent = `${score.toFixed(2)}/${getMaxScore()}`;
+            
+            // Set message based on score
+            const maxScore = getMaxScore();
+            const percentage = (score / maxScore) * 100;
+            
+            if (percentage >= 90) {
+                messageEl.textContent = "Outstanding! You're a Data Structures expert!";
+            } else if (percentage >= 70) {
+                messageEl.textContent = "Great job! You know Data Structures very well!";
+            } else if (percentage >= 50) {
+                messageEl.textContent = "Good effort! You have a decent understanding of Data Structures!";
+            } else {
+                messageEl.textContent = "Keep practicing! You'll get better with more experience!";
+            }
+        }
+
+        // Calculate maximum possible score
+        function getMaxScore() {
+            return questions.reduce((total, question) => {
+                return total + question.options.reduce((max, option) => {
+                    return option.weight > 0 ? max + option.weight : max;
+                }, 0);
+            }, 0).toFixed(2);
+        }
+
+        // Start timer
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timeEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressEl.style.width = `${progress}%`;
+        }
+
+        // Initialize the quiz
+        initQuiz();
+    </script>
+</body>
+</html>
