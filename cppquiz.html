@@ -285,9 +285,15 @@
         </div>
         
         <div class="question-container">
-            <h2 class="question" id="question"></h2>
-            <div class="question-meta" id="question-meta"></div>
-            <ul class="options" id="options"></ul>
+            <h2 class="question" id="question">Which of the following are valid data types in C?</h2>
+            <div class="question-meta" id="question-meta">Select ALL correct answers (multiple options can be correct)</div>
+            <ul class="options" id="options">
+                <li class="option" data-index="0"><span>int</span></li>
+                <li class="option" data-index="1"><span>float</span></li>
+                <li class="option" data-index="2"><span>double</span></li>
+                <li class="option" data-index="3"><span>string</span></li>
+                <li class="option" data-index="4"><span>bool</span></li>
+            </ul>
             
             <div class="weight-info">
                 <i class="fas fa-info-circle"></i> Some questions may have multiple correct answers with different weightages.
@@ -518,7 +524,7 @@
         });
 
         // Previous question
-        prevBtn.addEventListener('click', () {
+        prevBtn.addEventListener('click', () => {
             if (currentQuestion > 0) {
                 currentQuestion--;
                 loadQuestion();
