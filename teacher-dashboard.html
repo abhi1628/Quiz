@@ -18,8 +18,8 @@
     .stat-card{background:#fff;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,.1)}
     .stat-card h3{font-size:16px;color:#6c757d;margin-bottom:10px}
     .stat-card .value{font-size:28px;font-weight:700;color:#1a2a6c}
-    .controls{padding:20px;background:#f8f9fa;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
-    .btn{padding:12px 20px;background:#3498db;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:8px;transition:.2s}
+    .controls{padding:20px;background:#f8f9fa;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .btn{padding:12px 16px;background:#3498db;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:8px;transition:.2s}
     .btn:hover{background:#2980b9;transform:translateY(-1px)}
     .btn-refresh{background:#27ae60}.btn-refresh:hover{background:#219653}
     .btn-excel{background:#1f7a1f}.btn-excel:hover{background:#176017}
@@ -86,6 +86,9 @@
         <button class="btn btn-excel" onclick="downloadExcel()">
           <i class="fas fa-file-excel"></i> Download Excel (filtered)
         </button>
+        <button class="btn btn-excel" onclick="downloadAllExcel()">
+          <i class="fas fa-file-excel"></i> Download Excel (all)
+        </button>
       </div>
       <div class="last-updated" id="last-updated">Last updated: Never</div>
     </div>
@@ -143,7 +146,8 @@
     // ====== State ======
     let allResults = [];
     let filteredResults = [];
-    let sortState = { key: 'timestamp', dir: 'desc' }; // default: latest first
+    let currentView = []; // what is currently displayed (after sort)
+    let sortState = { key: 'timestamp', dir: 'desc' };
 
     // ====== Load & merge results ======
     async function loadResults() {
@@ -215,7 +219,6 @@
         return true;
       });
 
-      // Sort and display
       sortAndRender();
     }
 
@@ -233,7 +236,7 @@
     }
 
     function sortAndRender() {
-      // Enrich items with computed fields used for sorting/rendering
+      // Enrich and sort
       const withComputed = filteredResults.map(r => ({
         ...r,
         scorePct: (r.score && r.maxScore) ? (parseFloat(r.score) / parseFloat(r.maxScore)) * 100 : 0,
@@ -245,11 +248,9 @@
         const dir = sortState.dir === 'asc' ? 1 : -1;
         const key = sortState.key;
         let va, vb;
-
         if (key === 'timeSpent') { va = a.timeSec; vb = b.timeSec; }
         else if (key === 'timestamp') { va = a.ts; vb = b.ts; }
         else { va = (a[key] ?? '').toString().toLowerCase(); vb = (b[key] ?? '').toString().toLowerCase(); }
-
         if (va < vb) return -1 * dir;
         if (va > vb) return 1 * dir;
         return 0;
@@ -260,7 +261,8 @@
       const si = document.getElementById('si-' + sortState.key);
       if (si) si.textContent = sortState.dir === 'asc' ? '▲' : '▼';
 
-      displayResults(withComputed);
+      currentView = withComputed;
+      displayResults(currentView);
     }
 
     // ====== Display ======
@@ -315,44 +317,59 @@
         const avg = totalMax > 0 ? ((totalScore/totalMax)*100).toFixed(1) : '0.0';
         document.getElementById('average-score').textContent = `${avg}%`;
 
-        // Latest by timestamp
         const latest = [...results].sort((a,b) => new Date(b.timestamp||0)-new Date(a.timestamp||0))[0];
         const latestText = latest ? `${latest.studentName || 'Unknown'} - ${latest.subject || 'Unknown'}` : '-';
         document.getElementById('latest-quiz').textContent = latestText;
       }
     }
 
-    // ====== Excel download (filtered) ======
-    function downloadExcel() {
-      // Build JSON rows from currently displayed (filtered + sorted) table
-      const rows = [];
-      const trs = document.querySelectorAll('#results-body tr');
-      trs.forEach(tr => {
-        const tds = tr.querySelectorAll('td');
-        rows.push({
-          'Student Name': tds[0].innerText,
-          'Roll Number': tds[1].innerText,
-          'Subject': tds[2].innerText,
-          'Score': tds[3].innerText,
-          'Time Spent': tds[4].innerText,
-          'Date & Time': tds[5].innerText
-        });
+    // ====== Excel export ======
+    function buildExcelRows(list){
+      return list.map(r => {
+        const pct = (r.score && r.maxScore) ? (parseFloat(r.score)/parseFloat(r.maxScore))*100 : (r.scorePct ?? 0);
+        return {
+          'Student Name': r.studentName || 'Unknown',
+          'Roll Number': r.rollNumber || 'Unknown',
+          'Subject': r.subject || 'Unknown',
+          'Score': safeNum(r.score),
+          'Max Score': safeNum(r.maxScore),
+          'Score %': Math.round(pct * 10) / 10,
+          'Time Spent': r.timeSpent || '',
+          'Date & Time': r.timestamp ? new Date(r.timestamp).toLocaleString() : ''
+        };
       });
+    }
 
-      if (rows.length === 0) {
-        alert('No rows to export. Adjust filters or load results first.');
-        return;
-      }
-
+    function exportRowsToExcel(rows, baseName){
+      if (!rows.length) { alert('No rows to export.'); return; }
       const ws = XLSX.utils.json_to_sheet(rows);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Results');
-      XLSX.writeFile(wb, 'quiz-results-filtered.xlsx');
+      XLSX.writeFile(wb, filenameWithTs(baseName));
+    }
+
+    // Export what is currently shown (after filters/search/sort)
+    function downloadExcel(){
+      exportRowsToExcel(buildExcelRows(currentView), 'quiz-results-filtered');
+    }
+
+    // Export everything (GitHub + local), ignoring filters
+    function downloadAllExcel(){
+      const enriched = allResults.map(r => ({
+        ...r,
+        scorePct: (r.score && r.maxScore) ? (parseFloat(r.score) / parseFloat(r.maxScore)) * 100 : 0
+      }));
+      exportRowsToExcel(buildExcelRows(enriched), 'quiz-results-all');
     }
 
     // ====== Helpers ======
+    function safeNum(v){ const n = parseFloat(v); return Number.isFinite(n) ? n : 0; }
+    function filenameWithTs(base){
+      const d = new Date();
+      const pad = n => String(n).padStart(2,'0');
+      return `${base}_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.xlsx`;
+    }
     function parseTimeToSeconds(t='') {
-      // Accept "mm:ss" or "hh:mm:ss"
       const parts = (t||'').split(':').map(Number);
       if (parts.length === 2) return parts[0]*60 + parts[1];
       if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
