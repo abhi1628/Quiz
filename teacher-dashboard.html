@@ -1,579 +1,376 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard - Quiz Results</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 100%);
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            opacity: 0.9;
-            font-size: 18px;
-        }
-        
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px极速六合彩
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stat-card h3 {
-            font-size: 16px;
-            color: #6c757d;
-            margin-bottom: 10px;
-        }
-        
-        .stat-card .value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #1a2a6c;
-        }
-        
-        .controls {
-            padding: 20px;
-            background: #f8f9fa;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .btn {
-            padding: 12极速六合彩
-            padding: 12px 20px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
-        
-        .btn-refresh {
-            background: #27ae60;
-        }
-        
-        .btn-refresh:hover {
-            background: #219653;
-        }
-        
-        .last-updated {
-            color: #6c757d;
-            font-size: 14px;
-        }
-        
-        .results-container {
-            padding: 20px;
-            overflow-x: auto;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e9ecef;
-        }
-        
-        th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: #1a2a6c;
-            position: sticky;
-            top: 0;
-        }
-        
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .score-cell {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        
-        .score-high {
-            color: #27ae60;
-        }
-        
-        .score-medium {
-            color: #f39c12;
-        }
-        
-        .score-low {
-            color: #e74c3c;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #6极速六合彩
-            color: #6c757d;
-            font-size: 18px;
-        }
-        
-        .error {
-            text-align: center;
-            padding: 40px;
-            color: #e74c3c;
-            background: #fadbd8;
-            border-radius: 10极速六合彩
-            border-radius: 10px;
-            margin: 20px;
-        }
-        
-        .no-results {
-            text-align: center;
-            padding: 40px;
-            color: #6c757d;
-            font-style: italic;
-        }
-        
-        .subject-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .subject-python {
-            background: #3776ab;
-            color: white;
-        }
-        
-        .subject-ds {
-            background: #e44d26;
-            color: white;
-        }
-        
-        .subject-oopm {
-            background: #8e44ad;
-            color: white;
-        }
-        
-        .subject-cpp {
-            background: #00599c;
-            color: white;
-        }
-        
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-select {
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            background: white;
-        }
-        
-        @media (max-width: 768px) {
-            .stats-cards {
-                grid-template-columns: 1fr;
-            }
-            
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .filters {
-                flex-direction: column;
-            }
-            
-            th, td {
-                padding: 10px;
-                font-size: 14px;
-            }
-            
-            .header h极速六合彩
-            .header h1 {
-                font-size: 24px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Teacher Dashboard - Quiz Results</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+    body{background:linear-gradient(135deg,#1a2a6c 0%,#2c3e50 100%);min-height:100vh;padding:20px;color:#333}
+    .container{max-width:1200px;margin:0 auto;background:#fff;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:hidden}
+    .header{background:linear-gradient(135deg,#1a2a6c 0%,#2c3e50 100%);color:#fff;padding:25px;text-align:center}
+    .header h1{font-size:32px;margin-bottom:8px}
+    .header p{opacity:.9;font-size:18px}
+    .stats-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:20px;background:#f8f9fa}
+    .stat-card{background:#fff;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,.1)}
+    .stat-card h3{font-size:16px;color:#6c757d;margin-bottom:10px}
+    .stat-card .value{font-size:28px;font-weight:700;color:#1a2a6c}
+    .controls{padding:20px;background:#f8f9fa;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+    .btn{padding:12px 20px;background:#3498db;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:8px;transition:.2s}
+    .btn:hover{background:#2980b9;transform:translateY(-1px)}
+    .btn-refresh{background:#27ae60}.btn-refresh:hover{background:#219653}
+    .btn-excel{background:#1f7a1f}.btn-excel:hover{background:#176017}
+    .last-updated{color:#6c757d;font-size:14px}
+    .filters{display:flex;gap:12px;padding:0 20px 15px;background:#f8f9fa;flex-wrap:wrap}
+    .filter-select,.search-input{padding:10px;border:2px solid #ddd;border-radius:8px;background:#fff;min-width:180px}
+    .results-container{padding:20px;overflow-x:auto}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:14px;text-align:left;border-bottom:1px solid #e9ecef;vertical-align:middle}
+    th{background:#f8f9fa;font-weight:700;color:#1a2a6c;position:sticky;top:0;z-index:1;user-select:none}
+    tr:hover{background:#f8f9fa}
+    .score-cell{font-weight:700;font-size:16px}
+    .score-high{color:#27ae60}.score-medium{color:#f39c12}.score-low{color:#e74c3c}
+    .subject-badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;display:inline-block}
+    .subject-python{background:#3776ab;color:#fff}
+    .subject-ds{background:#e44d26;color:#fff}
+    .subject-oopm{background:#8e44ad;color:#fff}
+    .subject-cpp{background:#00599c;color:#fff}
+    .loading,.error,.no-results{text-align:center;padding:38px;font-size:18px}
+    .loading{color:#6c757d}
+    .error{color:#e74c3c;background:#fadbd8;border-radius:10px;margin:20px}
+    .no-results{color:#6c757d;font-style:italic}
+    .sortable{cursor:pointer}
+    .sortable .sort-indicator{margin-left:6px;font-size:12px;opacity:.6}
+    @media (max-width:768px){
+      .stats-cards{grid-template-columns:1fr}
+      .controls{flex-direction:column;align-items:stretch}
+      th,td{padding:10px;font-size:14px}
+      .header h1{font-size:24px}
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-chalkboard-teacher"></i> Teacher Dashboard</h1>
-            <p>Baderia Global Institute of Engineering and Management - Quiz Results Monitoring</p>
-        </div>
-        
-        <div class="stats-cards">
-            <div class="stat-card">
-                <h3>Total Students</h3>
-                <div class="value" id="total-students">0</div>
-            </div>
-            <div class="stat-card">
-                <h极速六合彩
-                <h3>Total Quizzes</h3>
-                <div class="value"极速六合彩
-                <div class="value" id="total-quizzes">0</div>
-            </div>
-            <div class="stat-card">
-                <h3>Average Score</h3>
-                <div class="value" id="average-score">0%</div>
-            </div>
-            <div class="stat-card">
-                <h3>Latest Quiz</h3>
-                <div class="value" id="latest-quiz">-</div>
-            </div>
-        </div>
-        
-        <div class="controls">
-            <button class="btn btn-refresh" onclick="loadResults()">
-                <i class="fas fa-sync-alt"></i> Refresh Results
-            </button>
-            <div class="last-updated" id="last-updated">
-                Last updated: Never
-            </div>
-        </div>
-        
-        <div class="filters">
-            <select class="filter-select" id="subject-filter" onchange="filterResults()">
-                <option value="all">All Subjects</option>
-                <option value="Python">Python</option>
-                <option value="Data Structures">Data Structures</option>
-                <option value="OOPM">OOPM</option>
-                <option value="C/CPP">C/CPP</option>
-            </select>
-            
-            <select class="filter-select" id="student-filter" onchange="filterResults()">
-                <option value="all">All Students</option>
-            </select>
-            
-            <select class="filter-select" id="score-filter" onchange="filterResults()">
-                <option value="all">All Scores</option>
-                <option value="high">High Scores (80%+)</option>
-                <option value="medium">Medium Scores (60-79%)</option>
-                <option value="low">Low Scores (Below 60%)</option>
-            </select>
-        </div>
-        
-        <div class="results-container">
-            <div id="loading" class="loading">
-                <i class="fas fa-spinner fa-spin"></i> Loading quiz results...
-            </div>
-            <div id="error" class="error" style="display: none;">
-                <i class="fas fa-exclamation-triangle"></i> Error loading results. Please try again.
-            </div>
-            <div id="no-results" class="no-results" style极速六合彩
-            <div id="no极速六合彩
-            <div id="no-results" class="no-results" style="display: none;">
-                No quiz results yet. Students' results will appear here.
-            </div>
-            <div id="results-table" style="display: none;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Roll Number</th>
-                            <th>Subject</th>
-                            <th>Score</th>
-                            <th>Time Spent</th>
-                            <th>Date & Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="results-body">
-                        <!-- Results will be inserted here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-chalkboard-teacher"></i> Teacher Dashboard</h1>
+      <p>Baderia Global Institute of Engineering and Management — Quiz Results Monitoring</p>
     </div>
 
-    <script>
-        // GitHub configuration
-        const GITHUB_USERNAME = 'abhi1628';
-        const REPO_NAME = 'Quiz';
-        const RESULTS_FILE = 'quiz-results.json';
-        const RESULTS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${RESULTS_FILE}`;
+    <div class="stats-cards">
+      <div class="stat-card">
+        <h3>Total Students</h3>
+        <div class="value" id="total-students">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Total Quizzes</h3>
+        <div class="value" id="total-quizzes">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Average Score</h3>
+        <div class="value" id="average-score">0%</div>
+      </div>
+      <div class="stat-card">
+        <h3>Latest Quiz</h3>
+        <div class="value" id="latest-quiz">-</div>
+      </div>
+    </div>
 
-        let allResults = [];
-        let filteredResults = [];
+    <div class="controls">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-refresh" onclick="loadResults()">
+          <i class="fas fa-sync-alt"></i> Refresh Results
+        </button>
+        <button class="btn btn-excel" onclick="downloadExcel()">
+          <i class="fas fa-file-excel"></i> Download Excel (filtered)
+        </button>
+      </div>
+      <div class="last-updated" id="last-updated">Last updated: Never</div>
+    </div>
 
-        async function loadResults() {
-            showLoading();
-            
-            try {
-                // Load from GitHub
-                const response = await fetch(RESULTS_URL + '?t=' + new Date().getTime()); // Cache bust
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const results = await response.json();
-                
-                // Load from localStorage (fallback)
-                const localResults = JSON.parse(localStorage.getItem('localQuizResults') || '[]');
-                allResults = [...results, ...localResults];
-                
-                console.log('Loaded results:', allResults); // Debug
-                
-                if (allResults.length === 0) {
-                    showNoResults();
-                } else {
-                    updateStudentFilter();
-                    filterResults();
-                    updateStats(allResults);
-                }
-                
-                updateLastUpdated();
-                
-            } catch (error) {
-                console.error('Error loading results:', error);
-                showError();
-            }
+    <div class="filters">
+      <input id="search-bar" class="search-input" type="text" placeholder="Search name / roll / subject…" onkeyup="searchResults()">
+      <select class="filter-select" id="subject-filter" onchange="filterResults()">
+        <option value="all">All Subjects</option>
+        <option value="Python">Python</option>
+        <option value="Data Structures">Data Structures</option>
+        <option value="OOPM">OOPM</option>
+        <option value="C/CPP">C/CPP</option>
+      </select>
+      <select class="filter-select" id="student-filter" onchange="filterResults()">
+        <option value="all">All Students</option>
+      </select>
+      <select class="filter-select" id="score-filter" onchange="filterResults()">
+        <option value="all">All Scores</option>
+        <option value="high">High (80%+)</option>
+        <option value="medium">Medium (60–79%)</option>
+        <option value="low">Low (&lt; 60%)</option>
+      </select>
+    </div>
+
+    <div class="results-container">
+      <div id="loading" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading quiz results…</div>
+      <div id="error" class="error" style="display:none;"><i class="fas fa-exclamation-triangle"></i> Error loading results. Please try again.</div>
+      <div id="no-results" class="no-results" style="display:none;">No quiz results yet. Students’ results will appear here.</div>
+
+      <div id="results-table" style="display:none;">
+        <table>
+          <thead>
+            <tr>
+              <th class="sortable" data-key="studentName" onclick="sortBy('studentName')">Student Name <span class="sort-indicator" id="si-studentName"></span></th>
+              <th class="sortable" data-key="rollNumber" onclick="sortBy('rollNumber')">Roll Number <span class="sort-indicator" id="si-rollNumber"></span></th>
+              <th class="sortable" data-key="subject" onclick="sortBy('subject')">Subject <span class="sort-indicator" id="si-subject"></span></th>
+              <th class="sortable" data-key="scorePct" onclick="sortBy('scorePct')">Score <span class="sort-indicator" id="si-scorePct"></span></th>
+              <th class="sortable" data-key="timeSpent" onclick="sortBy('timeSpent')">Time Spent <span class="sort-indicator" id="si-timeSpent"></span></th>
+              <th class="sortable" data-key="timestamp" onclick="sortBy('timestamp')">Date &amp; Time <span class="sort-indicator" id="si-timestamp"></span></th>
+            </tr>
+          </thead>
+          <tbody id="results-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== GitHub configuration ======
+    const GITHUB_USERNAME = 'abhi1628';
+    const REPO_NAME = 'Quiz';
+    const RESULTS_FILE = 'quiz-results.json';
+    const RESULTS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${RESULTS_FILE}`;
+
+    // ====== State ======
+    let allResults = [];
+    let filteredResults = [];
+    let sortState = { key: 'timestamp', dir: 'desc' }; // default: latest first
+
+    // ====== Load & merge results ======
+    async function loadResults() {
+      showLoading();
+      try {
+        const resp = await fetch(RESULTS_URL + '?t=' + Date.now());
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const ghResults = await resp.json();
+
+        const localResults = JSON.parse(localStorage.getItem('localQuizResults') || '[]');
+        allResults = [...ghResults, ...localResults];
+
+        updateStudentFilter();
+        filterResults();
+        updateStats(allResults);
+        updateLastUpdated();
+      } catch (e) {
+        console.error(e);
+        showError();
+      }
+    }
+
+    // ====== Filters & search ======
+    function updateStudentFilter() {
+      const sel = document.getElementById('student-filter');
+      const students = [...new Set(allResults.map(r => r.studentName || 'Unknown'))].sort();
+      sel.innerHTML = '<option value="all">All Students</option>' +
+        students.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+    }
+
+    function filterResults() {
+      const subjectFilter = document.getElementById('subject-filter').value;
+      const studentFilter = document.getElementById('student-filter').value;
+      const scoreFilter = document.getElementById('score-filter').value;
+      const q = (document.getElementById('search-bar').value || '').toLowerCase().trim();
+
+      filteredResults = allResults.filter(result => {
+        const sub = (result.subject || '').toLowerCase();
+        const name = (result.studentName || 'Unknown');
+        const roll = (result.rollNumber || 'Unknown');
+
+        // Subject filter
+        if (subjectFilter !== 'all') {
+          const matchSubject =
+            (subjectFilter === 'Python' && sub.includes('python')) ||
+            (subjectFilter === 'Data Structures' && (sub.includes('data') || sub.includes('ds'))) ||
+            (subjectFilter === 'OOPM' && (sub.includes('oop') || sub === 'oopm')) ||
+            (subjectFilter === 'C/CPP' && (sub.includes('c/') || sub.includes('cpp') || sub === 'c'));
+          if (!matchSubject) return false;
         }
 
-        function updateStudentFilter() {
-            const studentFilter = document.getElementById('student-filter');
-            const students = [...new Set(allResults.map(r => r.studentName))].sort();
-            
-            studentFilter.innerHTML = '<option value="all">All Students</option>';
-            students.forEach(student => {
-                studentFilter.innerHTML += `<option value="${student}">${student}</option>`;
-            });
+        // Student filter
+        if (studentFilter !== 'all' && name !== studentFilter) return false;
+
+        // Score filter
+        if (scoreFilter !== 'all' && result.score && result.maxScore) {
+          const pct = (parseFloat(result.score) / parseFloat(result.maxScore)) * 100;
+          if (scoreFilter === 'high' && pct < 80) return false;
+          if (scoreFilter === 'medium' && (pct >= 80 || pct < 60)) return false;
+          if (scoreFilter === 'low' && pct >= 60) return false;
         }
 
-        function filterResults() {
-            const subjectFilter = document.getElementById('subject-filter').value;
-            const studentFilter = document.getElementById('student-filter').value;
-            const scoreFilter = document.getElementById('score-filter').value;
-            
-            filteredResults = allResults.filter(result => {
-                // Subject filter
-                if (subjectFilter !== 'all') {
-                    const subjectMatch = 
-                        (subjectFilter === 'Python' && result.subject && result.subject.includes('Python')) ||
-                        (subjectFilter === 'Data Structures' && result.subject && result.subject.includes('Data')) ||
-                        (subjectFilter === 'OOPM' && result.subject && (result.subject.includes('OOP') || result.subject === 'OOPM')) ||
-                        (subjectFilter === 'C/CPP' && result.subject && result.subject.includes('C/'));
-                    
-                    if (!subjectMatch) return false;
-                }
-                
-                // Student filter
-                if (studentFilter !== 'all' && result.studentName !== studentFilter) {
-                    return false;
-                }
-                
-                // Score filter
-                if (scoreFilter !== 'all' && result.score && result.maxScore) {
-                    const percentage = (parseFloat(result.score) / parseFloat(result.maxScore)) * 100;
-                    
-                    if (scoreFilter === 'high' && percentage < 80) return false;
-                    if (scoreFilter === 'medium' && (percentage >= 80 || percentage < 60)) return false;
-                    if (scoreFilter === 'low' && percentage >= 60) return false;
-                }
-                
-                return true;
-            });
-            
-            displayResults(filteredResults);
+        // Search query
+        if (q) {
+          const hay = `${name} ${roll} ${result.subject || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
         }
 
-        function displayResults(results) {
-            const tableBody = document.getElementById('results-body');
-            tableBody.innerHTML = '';
-            
-            // Sort by timestamp (newest first)
-            results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            
-            results.forEach(result => {
-                const row = document.createElement('tr');
-                
-                // Calculate percentage for color coding
-                let percentage = 0;
-                if (result.score && result.maxScore) {
-                    percentage = (parseFloat(result.score) / parseFloat(result.maxScore)) * 100;
-                }
-                
-                let scoreClass = 'score-medium';
-                if (percentage >= 80) scoreClass = 'score-high';
-                if (percentage < 60) scoreClass = 'score-low';
-                
-                // Get subject class
-                const subjectClass = getSubjectClass(result.subject);
-                
-                row.innerHTML = `
-                    <td>${result.studentName || 'Unknown'}</td>
-                    <td>${result.rollNumber || 'Unknown'}</td>
-                    <td><span class="subject-badge ${subjectClass}">${result.subject || 'Unknown'}</span></td>
-                    <td class="score-cell ${scoreClass}">${result.score || '0'}/${result.maxScore || '0'}</td>
-                    <td>${result.timeSpent || 'N/A'}</td>
-                    <td>${result.timestamp ? formatDateTime(result.timestamp) : 'N/A'}</td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-            
-            if (results.length === 0) {
-                showNoResults();
-            } else {
-                showResultsTable();
-            }
-        }
+        return true;
+      });
 
-        function getSubjectClass(subject) {
-            if (!subject) return '';
-            
-            const subjectLower = subject.toLowerCase();
-            
-            if (subjectLower.includes('python')) return 'subject-python';
-            if (subjectLower.includes('data') || subjectLower.includes('ds')) return 'subject-ds';
-            if (subjectLower.includes('oop') || subjectLower.includes('object')) return 'subject-oopm';
-            if (subjectLower.includes('c') || subjectLower.includes('cpp')) return 'subject-cpp';
-            
-            return '';
-        }
+      // Sort and display
+      sortAndRender();
+    }
 
-        function updateStats(results) {
-            // Total quizzes
-            document.getElementById('total-quizzes').textContent = results.length;
-            
-            // Total unique students
-            const uniqueStudents = new Set(results.map(r => r.rollNumber));
-            document.getElementById('total-students').textContent = uniqueStudents.size;
-            
-            // Average score
-            if (results.length > 0) {
-                let totalScore = 0;
-                let totalMaxScore = 0;
-                
-                results.forEach(result => {
-                    if (result.score && result.maxScore) {
-                        totalScore += parseFloat(result.score);
-                        totalMaxScore += parseFloat(result.maxScore);
-                    }
-                });
-                
-                if (totalMaxScore > 0) {
-                    const averagePercentage = ((totalScore / totalMaxScore) * 100).toFixed(1);
-                    document.getElementById('average-score').textContent = `${averagePercentage}%`;
-                }
-            }
-            
-            // Latest quiz
-            if (results.length > 0) {
-                const latest = results[0];
-                document.getElementById('latest-quiz').textContent = 
-                    `${latest.studentName} - ${latest.subject}`;
-            }
-        }
+    function searchResults(){ filterResults(); }
 
-        function formatDateTime(timestamp) {
-            try {
-                const date = new Date(timestamp);
-                return date.toLocaleString();
-            } catch (e) {
-                return 'Invalid Date';
-            }
-        }
+    // ====== Sorting ======
+    function sortBy(key) {
+      if (sortState.key === key) {
+        sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortState.key = key;
+        sortState.dir = (key === 'studentName' || key === 'rollNumber' || key === 'subject') ? 'asc' : 'desc';
+      }
+      sortAndRender();
+    }
 
-        function updateLastUpdated() {
-            const now = new Date();
-            document.getElementById('last-updated').textContent = 
-                `Last updated: ${now.toLocaleTimeString()}`;
-        }
+    function sortAndRender() {
+      // Enrich items with computed fields used for sorting/rendering
+      const withComputed = filteredResults.map(r => ({
+        ...r,
+        scorePct: (r.score && r.maxScore) ? (parseFloat(r.score) / parseFloat(r.maxScore)) * 100 : 0,
+        timeSec: parseTimeToSeconds(r.timeSpent),
+        ts: r.timestamp ? new Date(r.timestamp).getTime() : 0
+      }));
 
-        function showLoading() {
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('error').style.display = 'none';
-            document.getElementById('no-results').style.display = 'none';
-            document.getElementById('results-table').style.display = 'none';
-        }
+      withComputed.sort((a, b) => {
+        const dir = sortState.dir === 'asc' ? 1 : -1;
+        const key = sortState.key;
+        let va, vb;
 
-        function showResultsTable() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error').style.display = 'none';
-            document.getElementById('no-results').style.display = 'none';
-            document.getElementById('results-table').style.display = 'block';
-        }
+        if (key === 'timeSpent') { va = a.timeSec; vb = b.timeSec; }
+        else if (key === 'timestamp') { va = a.ts; vb = b.ts; }
+        else { va = (a[key] ?? '').toString().toLowerCase(); vb = (b[key] ?? '').toString().toLowerCase(); }
 
-        function showError() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error').style.display = 'block';
-            document.getElementById('no-results').style.display = 'none';
-            document.getElementById('results-table').style.display = 'none';
-        }
+        if (va < vb) return -1 * dir;
+        if (va > vb) return 1 * dir;
+        return 0;
+      });
 
-        function showNoResults() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error').style.display = 'none';
-            document.getElementById('no-results').style.display = 'block';
-            document.getElementById('results-table').style.display = 'none';
-        }
+      // Update sort indicators
+      document.querySelectorAll('.sort-indicator').forEach(el => el.textContent = '');
+      const si = document.getElementById('si-' + sortState.key);
+      if (si) si.textContent = sortState.dir === 'asc' ? '▲' : '▼';
 
-        // Load results when page loads
-        document.addEventListener('DOMContentLoaded', loadResults);
-        
-        // Auto-refresh every 30 seconds
-        setInterval(loadResults, 30000);
-    </script>
+      displayResults(withComputed);
+    }
+
+    // ====== Display ======
+    function displayResults(results) {
+      const body = document.getElementById('results-body');
+      body.innerHTML = '';
+
+      results.forEach(r => {
+        const pct = r.scorePct ?? ((r.score && r.maxScore) ? (parseFloat(r.score)/parseFloat(r.maxScore))*100 : 0);
+        const scoreClass = pct >= 80 ? 'score-high' : (pct < 60 ? 'score-low' : 'score-medium');
+        const subjectClass = getSubjectClass(r.subject);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(r.studentName || 'Unknown')}</td>
+          <td>${escapeHtml(r.rollNumber || 'Unknown')}</td>
+          <td><span class="subject-badge ${subjectClass}">${escapeHtml(r.subject || 'Unknown')}</span></td>
+          <td class="score-cell ${scoreClass}">${fmt(r.score)}/${fmt(r.maxScore)}</td>
+          <td>${r.timeSpent || 'N/A'}</td>
+          <td>${r.timestamp ? formatDateTime(r.timestamp) : 'N/A'}</td>
+        `;
+        body.appendChild(tr);
+      });
+
+      if (results.length === 0) { showNoResults(); }
+      else { showResultsTable(); }
+    }
+
+    function getSubjectClass(subject='') {
+      const s = subject.toLowerCase();
+      if (s.includes('python')) return 'subject-python';
+      if (s.includes('data') || s.includes('ds')) return 'subject-ds';
+      if (s.includes('oop') || s === 'oopm') return 'subject-oopm';
+      if (s.includes('cpp') || s.includes('c/')) return 'subject-cpp';
+      return '';
+    }
+
+    // ====== Stats ======
+    function updateStats(results) {
+      document.getElementById('total-quizzes').textContent = results.length;
+
+      const uniqueStudents = new Set(results.map(r => r.rollNumber || r.studentName || 'Unknown'));
+      document.getElementById('total-students').textContent = uniqueStudents.size;
+
+      if (results.length > 0) {
+        let totalScore = 0, totalMax = 0;
+        results.forEach(r => {
+          if (r.score && r.maxScore) {
+            totalScore += parseFloat(r.score);
+            totalMax += parseFloat(r.maxScore);
+          }
+        });
+        const avg = totalMax > 0 ? ((totalScore/totalMax)*100).toFixed(1) : '0.0';
+        document.getElementById('average-score').textContent = `${avg}%`;
+
+        // Latest by timestamp
+        const latest = [...results].sort((a,b) => new Date(b.timestamp||0)-new Date(a.timestamp||0))[0];
+        const latestText = latest ? `${latest.studentName || 'Unknown'} - ${latest.subject || 'Unknown'}` : '-';
+        document.getElementById('latest-quiz').textContent = latestText;
+      }
+    }
+
+    // ====== Excel download (filtered) ======
+    function downloadExcel() {
+      // Build JSON rows from currently displayed (filtered + sorted) table
+      const rows = [];
+      const trs = document.querySelectorAll('#results-body tr');
+      trs.forEach(tr => {
+        const tds = tr.querySelectorAll('td');
+        rows.push({
+          'Student Name': tds[0].innerText,
+          'Roll Number': tds[1].innerText,
+          'Subject': tds[2].innerText,
+          'Score': tds[3].innerText,
+          'Time Spent': tds[4].innerText,
+          'Date & Time': tds[5].innerText
+        });
+      });
+
+      if (rows.length === 0) {
+        alert('No rows to export. Adjust filters or load results first.');
+        return;
+      }
+
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Results');
+      XLSX.writeFile(wb, 'quiz-results-filtered.xlsx');
+    }
+
+    // ====== Helpers ======
+    function parseTimeToSeconds(t='') {
+      // Accept "mm:ss" or "hh:mm:ss"
+      const parts = (t||'').split(':').map(Number);
+      if (parts.length === 2) return parts[0]*60 + parts[1];
+      if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
+      return 0;
+    }
+    function formatDateTime(ts) { try { return new Date(ts).toLocaleString(); } catch { return 'Invalid Date'; } }
+    function updateLastUpdated(){ document.getElementById('last-updated').textContent = 'Last updated: ' + new Date().toLocaleTimeString(); }
+    function showLoading(){ el('loading').style.display='block'; el('error').style.display='none'; el('no-results').style.display='none'; el('results-table').style.display='none'; }
+    function showResultsTable(){ el('loading').style.display='none'; el('error').style.display='none'; el('no-results').style.display='none'; el('results-table').style.display='block'; }
+    function showError(){ el('loading').style.display='none'; el('error').style.display='block'; el('no-results').style.display='none'; el('results-table').style.display='none'; }
+    function showNoResults(){ el('loading').style.display='none'; el('error').style.display='none'; el('no-results').style.display='block'; el('results-table').style.display='none'; }
+    function el(id){ return document.getElementById(id); }
+    function fmt(v){ return (v===undefined||v===null)?'0':v; }
+    function escapeHtml(str){ return (str??'').toString().replace(/[&<>"']/g,s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
+
+    // ====== Init ======
+    document.addEventListener('DOMContentLoaded', loadResults);
+    setInterval(loadResults, 30000); // auto-refresh every 30s
+  </script>
 </body>
 </html>
