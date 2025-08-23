@@ -59,6 +59,7 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
+            box-shadow: 0 4px极速六合彩
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
@@ -85,6 +86,7 @@
         }
         
         .btn {
+            padding: 12极速六合彩
             padding: 12px 20px;
             background: #3498db;
             color: white;
@@ -165,6 +167,7 @@
         .loading {
             text-align: center;
             padding: 40px;
+            color: #6极速六合彩
             color: #6c757d;
             font-size: 18px;
         }
@@ -174,6 +177,7 @@
             padding: 40px;
             color: #e74c3c;
             background: #fadbd8;
+            border-radius: 10极速六合彩
             border-radius: 10px;
             margin: 20px;
         }
@@ -212,6 +216,20 @@
             color: white;
         }
         
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-select {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+        
         @media (max-width: 768px) {
             .stats-cards {
                 grid-template-columns: 1fr;
@@ -222,11 +240,16 @@
                 align-items: stretch;
             }
             
+            .filters {
+                flex-direction: column;
+            }
+            
             th, td {
                 padding: 10px;
                 font-size: 14px;
             }
             
+            .header h极速六合彩
             .header h1 {
                 font-size: 24px;
             }
@@ -237,7 +260,7 @@
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-chalkboard-teacher"></i> Teacher Dashboard</h1>
-            <p>Baderia Global Institute of Engineering and Management- Quiz Results Monitoring</p>
+            <p>Baderia Global Institute of Engineering and Management - Quiz Results Monitoring</p>
         </div>
         
         <div class="stats-cards">
@@ -246,7 +269,9 @@
                 <div class="value" id="total-students">0</div>
             </div>
             <div class="stat-card">
+                <h极速六合彩
                 <h3>Total Quizzes</h3>
+                <div class="value"极速六合彩
                 <div class="value" id="total-quizzes">0</div>
             </div>
             <div class="stat-card">
@@ -268,6 +293,27 @@
             </div>
         </div>
         
+        <div class="filters">
+            <select class="filter-select" id="subject-filter" onchange="filterResults()">
+                <option value="all">All Subjects</option>
+                <option value="Python">Python</option>
+                <option value="Data Structures">Data Structures</option>
+                <option value="OOPM">OOPM</option>
+                <option value="C/CPP">C/CPP</option>
+            </select>
+            
+            <select class="filter-select" id="student-filter" onchange="filterResults()">
+                <option value="all">All Students</option>
+            </select>
+            
+            <select class="filter-select" id="score-filter" onchange="filterResults()">
+                <option value="all">All Scores</option>
+                <option value="high">High Scores (80%+)</option>
+                <option value="medium">Medium Scores (60-79%)</option>
+                <option value="low">Low Scores (Below 60%)</option>
+            </select>
+        </div>
+        
         <div class="results-container">
             <div id="loading" class="loading">
                 <i class="fas fa-spinner fa-spin"></i> Loading quiz results...
@@ -275,6 +321,8 @@
             <div id="error" class="error" style="display: none;">
                 <i class="fas fa-exclamation-triangle"></i> Error loading results. Please try again.
             </div>
+            <div id="no-results" class="no-results" style极速六合彩
+            <div id="no极速六合彩
             <div id="no-results" class="no-results" style="display: none;">
                 No quiz results yet. Students' results will appear here.
             </div>
@@ -305,12 +353,15 @@
         const RESULTS_FILE = 'quiz-results.json';
         const RESULTS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${RESULTS_FILE}`;
 
+        let allResults = [];
+        let filteredResults = [];
+
         async function loadResults() {
             showLoading();
             
             try {
                 // Load from GitHub
-                const response = await fetch(RESULTS_URL);
+                const response = await fetch(RESULTS_URL + '?t=' + new Date().getTime()); // Cache bust
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -319,12 +370,15 @@
                 
                 // Load from localStorage (fallback)
                 const localResults = JSON.parse(localStorage.getItem('localQuizResults') || '[]');
-                const allResults = [...results, ...localResults];
+                allResults = [...results, ...localResults];
+                
+                console.log('Loaded results:', allResults); // Debug
                 
                 if (allResults.length === 0) {
                     showNoResults();
                 } else {
-                    displayResults(allResults);
+                    updateStudentFilter();
+                    filterResults();
                     updateStats(allResults);
                 }
                 
@@ -334,6 +388,53 @@
                 console.error('Error loading results:', error);
                 showError();
             }
+        }
+
+        function updateStudentFilter() {
+            const studentFilter = document.getElementById('student-filter');
+            const students = [...new Set(allResults.map(r => r.studentName))].sort();
+            
+            studentFilter.innerHTML = '<option value="all">All Students</option>';
+            students.forEach(student => {
+                studentFilter.innerHTML += `<option value="${student}">${student}</option>`;
+            });
+        }
+
+        function filterResults() {
+            const subjectFilter = document.getElementById('subject-filter').value;
+            const studentFilter = document.getElementById('student-filter').value;
+            const scoreFilter = document.getElementById('score-filter').value;
+            
+            filteredResults = allResults.filter(result => {
+                // Subject filter
+                if (subjectFilter !== 'all') {
+                    const subjectMatch = 
+                        (subjectFilter === 'Python' && result.subject && result.subject.includes('Python')) ||
+                        (subjectFilter === 'Data Structures' && result.subject && result.subject.includes('Data')) ||
+                        (subjectFilter === 'OOPM' && result.subject && (result.subject.includes('OOP') || result.subject === 'OOPM')) ||
+                        (subjectFilter === 'C/CPP' && result.subject && result.subject.includes('C/'));
+                    
+                    if (!subjectMatch) return false;
+                }
+                
+                // Student filter
+                if (studentFilter !== 'all' && result.studentName !== studentFilter) {
+                    return false;
+                }
+                
+                // Score filter
+                if (scoreFilter !== 'all' && result.score && result.maxScore) {
+                    const percentage = (parseFloat(result.score) / parseFloat(result.maxScore)) * 100;
+                    
+                    if (scoreFilter === 'high' && percentage < 80) return false;
+                    if (scoreFilter === 'medium' && (percentage >= 80 || percentage < 60)) return false;
+                    if (scoreFilter === 'low' && percentage >= 60) return false;
+                }
+                
+                return true;
+            });
+            
+            displayResults(filteredResults);
         }
 
         function displayResults(results) {
@@ -347,7 +448,11 @@
                 const row = document.createElement('tr');
                 
                 // Calculate percentage for color coding
-                const percentage = (parseFloat(result.score) / parseFloat(result.maxScore)) * 100;
+                let percentage = 0;
+                if (result.score && result.maxScore) {
+                    percentage = (parseFloat(result.score) / parseFloat(result.maxScore)) * 100;
+                }
+                
                 let scoreClass = 'score-medium';
                 if (percentage >= 80) scoreClass = 'score-high';
                 if (percentage < 60) scoreClass = 'score-low';
@@ -356,18 +461,35 @@
                 const subjectClass = getSubjectClass(result.subject);
                 
                 row.innerHTML = `
-                    <td>${result.studentName}</td>
-                    <td>${result.rollNumber}</td>
-                    <td><span class="subject-badge ${subjectClass}">${result.subject}</span></td>
-                    <td class="score-cell ${scoreClass}">${result.score}/${result.maxScore}</td>
-                    <td>${result.timeSpent}</td>
-                    <td>${formatDateTime(result.timestamp)}</td>
+                    <td>${result.studentName || 'Unknown'}</td>
+                    <td>${result.rollNumber || 'Unknown'}</td>
+                    <td><span class="subject-badge ${subjectClass}">${result.subject || 'Unknown'}</span></td>
+                    <td class="score-cell ${scoreClass}">${result.score || '0'}/${result.maxScore || '0'}</td>
+                    <td>${result.timeSpent || 'N/A'}</td>
+                    <td>${result.timestamp ? formatDateTime(result.timestamp) : 'N/A'}</td>
                 `;
                 
                 tableBody.appendChild(row);
             });
             
-            showResultsTable();
+            if (results.length === 0) {
+                showNoResults();
+            } else {
+                showResultsTable();
+            }
+        }
+
+        function getSubjectClass(subject) {
+            if (!subject) return '';
+            
+            const subjectLower = subject.toLowerCase();
+            
+            if (subjectLower.includes('python')) return 'subject-python';
+            if (subjectLower.includes('data') || subjectLower.includes('ds')) return 'subject-ds';
+            if (subjectLower.includes('oop') || subjectLower.includes('object')) return 'subject-oopm';
+            if (subjectLower.includes('c') || subjectLower.includes('cpp')) return 'subject-cpp';
+            
+            return '';
         }
 
         function updateStats(results) {
@@ -380,10 +502,20 @@
             
             // Average score
             if (results.length > 0) {
-                const totalScore = results.reduce((sum, result) => sum + parseFloat(result.score), 0);
-                const totalMaxScore = results.reduce((sum, result) => sum + parseFloat(result.maxScore), 0);
-                const averagePercentage = ((totalScore / totalMaxScore) * 100).toFixed(1);
-                document.getElementById('average-score').textContent = `${averagePercentage}%`;
+                let totalScore = 0;
+                let totalMaxScore = 0;
+                
+                results.forEach(result => {
+                    if (result.score && result.maxScore) {
+                        totalScore += parseFloat(result.score);
+                        totalMaxScore += parseFloat(result.maxScore);
+                    }
+                });
+                
+                if (totalMaxScore > 0) {
+                    const averagePercentage = ((totalScore / totalMaxScore) * 100).toFixed(1);
+                    document.getElementById('average-score').textContent = `${averagePercentage}%`;
+                }
             }
             
             // Latest quiz
@@ -394,17 +526,13 @@
             }
         }
 
-        function getSubjectClass(subject) {
-            if (subject.includes('Python')) return 'subject-python';
-            if (subject.includes('Data')) return 'subject-ds';
-            if (subject.includes('OOP')) return 'subject-oopm';
-            if (subject.includes('C/CPP')) return 'subject-cpp';
-            return '';
-        }
-
         function formatDateTime(timestamp) {
-            const date = new Date(timestamp);
-            return date.toLocaleString();
+            try {
+                const date = new Date(timestamp);
+                return date.toLocaleString();
+            } catch (e) {
+                return 'Invalid Date';
+            }
         }
 
         function updateLastUpdated() {
