@@ -345,6 +345,526 @@
                     { text: "Inheritance", weight: 0.2 },
                     { text: "Polymorphism", weight: 0.2 },
                     { text: "Abstraction", weight: 0.2 },
+                    { text: "Compilation", weight: 0 }
+                ],
+                type: "multi",
+                maxScore: 0.8 // Sum of positive weights
+            },
+            {
+                question: "Select the correct statements about Inheritance:",
+                options: [
+                    { text: "Allows code reusability", weight: 0.25 },
+                    { text: "Supports 'is-a' relationship", weight: 0.25 },
+                    { text: "Java supports multiple inheritance", weight: 0 },
+                    { text: "Constructors are inherited", weight: 0 },
+                    { text: "Promotes hierarchical classification", weight: 0.25 }
+                ],
+                type: "multi",
+                maxScore: 0.75
+            },
+            {
+                question: "Which concepts are related to Polymorphism?",
+                options: [
+                    { text: "Method Overloading", weight: 0.25 },
+                    { text: "Method Overriding", weight: 0.25 },
+                    { text: "Dynamic Binding", weight: 0.25 },
+                    { text: "Static Binding", weight: 0.25 },
+                    { text: "Data Hiding", weight: 0 }
+                ],
+                type: "multi",
+                maxScore: 1.0
+            },
+            {
+                question: "What is the main purpose of Abstraction in OOP?",
+                options: [
+                    { text: "Hiding implementation details", weight: 0.3 },
+                    { text: "Showing only essential features", weight: 0.3 },
+                    { text: "Reducing complexity", weight: 0.3 },
+                    { text: "Improving code execution speed", weight: 0 },
+                    { text: "Increasing memory efficiency", weight: 0 }
+                ],
+                type: "multi",
+                maxScore: 0.9
+            },
+            {
+                question: "Which access modifier provides the widest accessibility?",
+                options: [
+                    { text: "public", weight: 1.0 },
+                    { text: "private", weight: 0 },
+                    { text: "protected", weight: 0 },
+                    { text: "default", weight: 0 },
+                    { text: "final", weight: 0 }
+                ],
+                type: "single",
+                maxScore: 1.0
+            },
+            {
+                question: "What are advantages of Encapsulation?",
+                options: [
+                    { text: "Data hiding", weight: 0.25 },
+                    { text: "Increased flexibility", weight: 0.25 },
+                    { text: "Better maintenance", weight: 0.25 },
+                    { text: "Reusability", weight: 0.25 },
+                    { text: "Faster execution", weight: 0 }
+                ],
+                type: "multi",
+                maxScore: 1.0
+            }
+        ];
+
+        // DOM elements
+        const questionEl = document.getElementById('question');
+        const questionMetaEl = document.getElementById('question-meta');
+        const optionsEl = document.getElementById('options');
+        const questionNumberEl = document.getElementById('question-number');
+        const scoreEl = document.getElementById('score');
+        const timeEl = document.getElementById('time');
+        const progressEl = document.getElementById('progress');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultContainer = document.getElementById('result-container');
+        const finalScoreEl = document.getElementById('final-score');
+        const messageEl = document.getElementById('message');
+        const explanationEl = document.getElementById('explanation');
+        const explanationTextEl = document.getElementById('explanation-text');
+
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOptions = new Array(questions.length).fill(null).map(() => []);
+        let timeLeft = 300; // 5 minutes
+        let timer;
+
+        // Initialize quiz
+        function initQuiz() {
+            loadQuestion();
+            startTimer();
+            updateProgress();
+        }
+
+        // Load question
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            questionEl.textContent = question.question;
+            questionNumberEl.textContent = currentQuestion + 1;
+            
+            // Update question meta info
+            questionMetaEl.textContent = question.type === "multi" 
+                ? "Select ALL correct answers (multiple options can be correct)" 
+                : "Select ONE correct answer";
+            
+            optionsEl.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const li = document.createElement('li');
+                li.className = 'option';
+                
+                // Add option text
+                const textSpan = document.createElement('span');
+                textSpan.textContent = option.text;
+                li.appendChild(textSpan);
+                
+                li.setAttribute('data-index', index);
+                
+                // Check if this option is selected
+                if (selectedOptions[currentQuestion].includes(index)) {
+                    li.classList.add('selected');
+                }
+                
+                li.addEventListener('click', selectOption);
+                optionsEl.appendChild(li);
+            });
+            
+            updateNavigation();
+        }
+
+        // Select option
+        function selectOption(e) {
+            const selectedIndex = parseInt(e.target.closest('.option').getAttribute('data-index'));
+            const question = questions[currentQuestion];
+            
+            if (question.type === "single") {
+                // For single select, clear previous selection
+                selectedOptions[currentQuestion] = [selectedIndex];
+                
+                // Update UI
+                const options = optionsEl.querySelectorAll('.option');
+                options.forEach(option => {
+                    option.classList.remove('selected');
+                    option.classList.remove('incorrect');
+                });
+                
+                e.target.closest('.option').classList.add('selected');
+            } else {
+                // For multi select, toggle selection
+                const optionElement = e.target.closest('.option');
+                
+                if (selectedOptions[currentQuestion].includes(selectedIndex)) {
+                    // Deselect
+                    selectedOptions[currentQuestion] = selectedOptions[currentQuestion].filter(i => i !== selectedIndex);
+                    optionElement.classList.remove('selected');
+                } else {
+                    // Select
+                    selectedOptions[currentQuestion].push(selectedIndex);
+                    optionElement.classList.add('selected');
+                }
+            }
+            
+            // Recalculate total score
+            calculateTotalScore();
+        }
+
+        // Calculate total score
+        function calculateTotalScore() {
+            let totalScore = 0;
+            
+            // Calculate score for each question
+            for (let i = 0; i < questions.length; i++) {
+                const question = questions[i];
+                const selected = selectedOptions[i];
+                
+                if (selected.length > 0) {
+                    let questionScore = 0;
+                    
+                    // Calculate score for this question
+                    for (const index of selected) {
+                        questionScore += question.options[index].weight;
+                    }
+                    
+                    // Ensure question score doesn't exceed maximum or go below 0
+                    questionScore = Math.max(0, Math.min(questionScore, question.maxScore));
+                    totalScore += questionScore;
+                }
+            }
+            
+            score = totalScore;
+            scoreEl.textContent = score.toFixed(2);
+        }
+
+        // Update navigation buttons
+        function updateNavigation() {
+            prevBtn.style.display = currentQuestion === 0 ? 'none' : 'block';
+            nextBtn.style.display = currentQuestion === questions.length - 1 ? 'none' : 'block';
+            submitBtn.style.display = currentQuestion === questions.length - 1 ? 'block' : 'none';
+        }
+
+        // Next question
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+                updateProgress();
+            }
+        });
+
+        // Previous question
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+                updateProgress();
+            }
+        });
+
+        // Submit quiz
+        submitBtn.addEventListener('click', showResults);
+
+        // Show results
+        function showResults() {
+            clearInterval(timer);
+            document.querySelector('.question-container').style.display = 'none';
+            document.querySelector('.navigation').style.display = 'none';
+            document.querySelector('.quiz-info').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            
+            resultContainer.style.display = 'block';
+            
+            // Calculate max possible score
+            const maxScore = questions.reduce((total, question) => total + question.maxScore, 0);
+            
+            finalScoreEl.textContent = `${score.toFixed(2)}/${maxScore.toFixed(2)}`;
+            
+            // Set message based on score
+            const percentage = (score / maxScore) * 100;
+            
+            if (percentage >= 90) {
+                messageEl.textContent = "Outstanding! You're an OOPM expert!";
+            } else if (percentage >= 70) {
+                messageEl.textContent = "Great job! You know OOPM very well!";
+            } else if (percentage >= 50) {
+                messageEl.textContent = "Good effort! You have a decent understanding of OOPM!";
+            } else {
+                messageEl.textContent = "Keep practicing! You'll get better with more experience!";
+            }
+        }
+
+        // Start timer
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timeEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressEl.style.width = `${progress}%`;
+        }
+
+        // Initialize the quiz
+        initQuiz();
+    </script>
+</body>
+</html>        
+        .options {
+            list-style-type: none;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            background-color: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        #prev-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        #prev-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        #next-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        #next-btn:hover {
+            background-color: #0069d9;
+        }
+        
+        #submit-btn {
+            background-color: #28a745;
+            color: white;
+            display: none;
+        }
+        
+        #submit-btn:hover {
+            background-color: #218838;
+        }
+        
+        .result-container {
+            padding: 30px;
+            text-align: center;
+            display: none;
+        }
+        
+        .result-container h2 {
+            margin-bottom: 15px;
+            color: #343a40;
+        }
+        
+        .score {
+            font-size: 48px;
+            color: #8e44ad;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            margin-bottom: 25px;
+            font-size: 18px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, #8e44ad 0%, #2980b9 100%);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .weight-info {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .explanation {
+            background-color: #e7f5ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .explanation h3 {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 576px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .question {
+                font-size: 18px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .student-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-cubes"></i> OOPM Quiz</h1>
+            <p>Test your Object Oriented Programming knowledge with weighted scoring</p>
+        </div>
+        
+        <div class="student-info">
+            <div class="info-item">Name: <span id="display-name">Student</span></div>
+            <div class="info-item">Roll No: <span id="display-roll">Unknown</span></div>
+            <div class="info-item">Subject: <span id="display-subject">OOPM</span></div>
+        </div>
+        
+        <div class="quiz-info">
+            <div class="quiz-info-item">
+                <span id="question-number">1</span>
+                Question
+            </div>
+            <div class="quiz-info-item">
+                <span id="score">0</span>
+                Score
+            </div>
+            <div class="quiz-info-item">
+                <span id="time">05:00</span>
+                Time Left
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="question-container">
+            <h2 class="question" id="question"></h2>
+            <div class="question-meta" id="question-meta"></div>
+            <ul class="options" id="options"></ul>
+            
+            <div class="explanation" id="explanation">
+                <h3>Explanation:</h3>
+                <p id="explanation-text"></p>
+            </div>
+            
+            <div class="weight-info">
+                <i class="fas fa-info-circle"></i> Some questions may have multiple correct answers with different weightages.
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button id="prev-btn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+            <button id="submit-btn">Submit Quiz</button>
+        </div>
+        
+        <div class="result-container" id="result-container">
+            <h2>Quiz Completed!</h2>
+            <div class="score" id="final-score">0/10</div>
+            <p class="message" id="message">Great job! Keep learning!</p>
+        </div>
+    </div>
+
+    <script>
+        // Get student info from sessionStorage
+        const studentName = sessionStorage.getItem('studentName');
+        const rollNumber = sessionStorage.getItem('rollNumber');
+        const subject = sessionStorage.getItem('subject');
+        
+        // Display student info
+        document.getElementById('display-name').textContent = studentName || 'Student';
+        document.getElementById('display-roll').textContent = rollNumber || 'Unknown';
+        document.getElementById('display-subject').textContent = 'OOPM';
+        
+        // OOPM questions with multiple correct answers and weightages
+        const questions = [
+            {
+                question: "Which of the following are pillars of Object Oriented Programming?",
+                options: [
+                    { text: "Encapsulation", weight: 0.2 },
+                    { text: "Inheritance", weight: 0.2 },
+                    { text: "Polymorphism", weight: 0.2 },
+                    { text: "Abstraction", weight: 0.2 },
                     { text: "Compilation", weight: -0.2 }
                 ],
                 type: "multi",
