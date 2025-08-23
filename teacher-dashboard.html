@@ -14,430 +14,438 @@
         }
         
         body {
-            background-color: #f5f7fb;
-            color: #333;
+            background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 100%);
+            min-height: 100vh;
             padding: 20px;
+            color: #333;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-        }
-        
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        header h1 {
-            color: #3a7bd5;
-            font-weight: 600;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .user-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #3a7bd5;
-        }
-        
-        /* Dashboard Cards */
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .card {
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 100%);
+            color: white;
+            padding: 25px;
             text-align: center;
         }
         
-        .card i {
-            font-size: 30px;
-            margin-bottom: 15px;
-            color: #3a7bd5;
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
         }
         
-        .card h3 {
-            font-size: 28px;
-            margin-bottom: 5px;
-            color: #3a7bd5;
+        .header p {
+            opacity: 0.9;
+            font-size: 18px;
         }
         
-        .card p {
-            color: #777;
-        }
-        
-        /* Filters */
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .filter-item {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .filter-item label {
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #495057;
-        }
-        
-        .filter-item select, .filter-item input {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            min-width: 150px;
-        }
-        
-        /* Table Styles */
-        .table-container {
-            background: white;
-            border-radius: 10px;
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
             padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+            background: #f8f9fa;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 16px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a2a6c;
+        }
+        
+        .controls {
+            padding: 20px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-refresh {
+            background: #27ae60;
+        }
+        
+        .btn-refresh:hover {
+            background: #219653;
+        }
+        
+        .last-updated {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .results-container {
+            padding: 20px;
             overflow-x: auto;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 15px;
         }
         
         th, td {
             padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e9ecef;
         }
         
         th {
             background-color: #f8f9fa;
             font-weight: 600;
-            color: #495057;
-            cursor: pointer;
-        }
-        
-        th:hover {
-            background-color: #e9ecef;
+            color: #1a2a6c;
+            position: sticky;
+            top: 0;
         }
         
         tr:hover {
             background-color: #f8f9fa;
         }
         
-        .status {
-            display: inline-block;
-            padding: 5px 10px;
+        .score-cell {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .score-high {
+            color: #27ae60;
+        }
+        
+        .score-medium {
+            color: #f39c12;
+        }
+        
+        .score-low {
+            color: #e74c3c;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-size: 18px;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #e74c3c;
+            background: #fadbd8;
+            border-radius: 10px;
+            margin: 20px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .subject-badge {
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
         }
         
-        .status.completed {
-            background-color: #e6f4ea;
-            color: #138a54;
-        }
-        
-        /* Real-time notification */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4caf50;
+        .subject-python {
+            background: #3776ab;
             color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 1000;
-            animation: slideIn 0.5s forwards;
         }
         
-        @keyframes slideIn {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .subject-ds {
+            background: #e44d26;
+            color: white;
         }
         
-        /* Responsive Design */
+        .subject-oopm {
+            background: #8e44ad;
+            color: white;
+        }
+        
+        .subject-cpp {
+            background: #00599c;
+            color: white;
+        }
+        
         @media (max-width: 768px) {
-            .filters {
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
                 flex-direction: column;
+                align-items: stretch;
             }
             
-            .filter-item {
-                width: 100%;
+            th, td {
+                padding: 10px;
+                font-size: 14px;
             }
             
-            .filter-item select, .filter-item input {
-                width: 100%;
+            .header h1 {
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1><i class="fas fa-chart-line"></i> Quiz Results Dashboard</h1>
-            <div class="user-info">
-                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Teacher">
-                <div>
-                    <h4>Dr. Sarah Johnson</h4>
-                    <p>Computer Science Department</p>
-                </div>
+        <div class="header">
+            <h1><i class="fas fa-chalkboard-teacher"></i> Teacher Dashboard</h1>
+            <p>Baderia Global Institute of Engineering and Management- Quiz Results Monitoring</p>
+        </div>
+        
+        <div class="stats-cards">
+            <div class="stat-card">
+                <h3>Total Students</h3>
+                <div class="value" id="total-students">0</div>
             </div>
-        </header>
-
-        <!-- Dashboard Cards -->
-        <div class="dashboard-cards">
-            <div class="card">
-                <i class="fas fa-users"></i>
-                <h3 id="total-students">0</h3>
-                <p>Total Students</p>
+            <div class="stat-card">
+                <h3>Total Quizzes</h3>
+                <div class="value" id="total-quizzes">0</div>
             </div>
-            <div class="card">
-                <i class="fas fa-check-circle"></i>
-                <h3 id="total-submissions">0</h3>
-                <p>Submissions</p>
+            <div class="stat-card">
+                <h3>Average Score</h3>
+                <div class="value" id="average-score">0%</div>
             </div>
-            <div class="card">
-                <i class="fas fa-percentage"></i>
-                <h3 id="average-score">0</h3>
-                <p>Average Score</p>
-            </div>
-            <div class="card">
-                <i class="fas fa-clock"></i>
-                <h3 id="average-time">00:00</h3>
-                <p>Average Time</p>
+            <div class="stat-card">
+                <h3>Latest Quiz</h3>
+                <div class="value" id="latest-quiz">-</div>
             </div>
         </div>
-
-        <!-- Filters -->
-        <div class="filters">
-            <div class="filter-item">
-                <label for="subject">Subject</label>
-                <select id="subject">
-                    <option value="all">All Subjects</option>
-                    <option value="Python">Python</option>
-                    <option value="Java">Java</option>
-                    <option value="Web Development">Web Development</option>
-                </select>
-            </div>
-            <div class="filter-item">
-                <label for="date">Date</label>
-                <input type="date" id="date">
-            </div>
-            <div class="filter-item">
-                <label for="score">Min Score</label>
-                <select id="score">
-                    <option value="0">All Scores</option>
-                    <option value="3">3+</option>
-                    <option value="4">4+</option>
-                    <option value="4.5">4.5+</option>
-                </select>
-            </div>
-            <div class="filter-item">
-                <label for="search">Search</label>
-                <input type="text" id="search" placeholder="Student name or ID">
+        
+        <div class="controls">
+            <button class="btn btn-refresh" onclick="loadResults()">
+                <i class="fas fa-sync-alt"></i> Refresh Results
+            </button>
+            <div class="last-updated" id="last-updated">
+                Last updated: Never
             </div>
         </div>
-
-        <!-- Submissions Table -->
-        <div class="table-container">
-            <h3>Quiz Submissions</h3>
-            <table id="results-table">
-                <thead>
-                    <tr>
-                        <th>Student Name <i class="fas fa-sort"></i></th>
-                        <th>Roll Number <i class="fas fa-sort"></i></th>
-                        <th>Subject <i class="fas fa-sort"></i></th>
-                        <th>Score <i class="fas fa-sort"></i></th>
-                        <th>Max Score <i class="fas fa-sort"></i></th>
-                        <th>Time Spent <i class="fas fa-sort"></i></th>
-                        <th>Submission Time <i class="fas fa-sort"></i></th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="results-body">
-                    <tr>
-                        <td colspan="8" style="text-align: center;">No submissions yet</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Real-time notification -->
-        <div class="notification" id="notification">
-            New quiz submission received!
+        
+        <div class="results-container">
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading quiz results...
+            </div>
+            <div id="error" class="error" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i> Error loading results. Please try again.
+            </div>
+            <div id="no-results" class="no-results" style="display: none;">
+                No quiz results yet. Students' results will appear here.
+            </div>
+            <div id="results-table" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Roll Number</th>
+                            <th>Subject</th>
+                            <th>Score</th>
+                            <th>Time Spent</th>
+                            <th>Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-body">
+                        <!-- Results will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
-        // Store quiz results
-        let quizResults = [];
-        
-        // DOM elements
-        const resultsBody = document.getElementById('results-body');
-        const totalStudentsEl = document.getElementById('total-students');
-        const totalSubmissionsEl = document.getElementById('total-submissions');
-        const averageScoreEl = document.getElementById('average-score');
-        const averageTimeEl = document.getElementById('average-time');
-        const notificationEl = document.getElementById('notification');
-        
-        // Initialize the dashboard
-        function initDashboard() {
-            // Load any existing results from localStorage
-            const storedResults = localStorage.getItem('quizResults');
-            if (storedResults) {
-                quizResults = JSON.parse(storedResults);
-                updateDashboard();
-            }
+        // GitHub configuration
+        const GITHUB_USERNAME = 'abhi1628';
+        const REPO_NAME = 'Quiz';
+        const RESULTS_FILE = 'quiz-results.json';
+        const RESULTS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${RESULTS_FILE}`;
+
+        async function loadResults() {
+            showLoading();
             
-            // Simulate receiving new submissions (for demo purposes)
-            setInterval(() => {
-                // 20% chance of receiving a new submission each interval
-                if (Math.random() < 0.2) {
-                    simulateNewSubmission();
+            try {
+                // Load from GitHub
+                const response = await fetch(RESULTS_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            }, 10000); // Check every 10 seconds
-        }
-        
-        // Update the dashboard with current results
-        function updateDashboard() {
-            // Update table
-            if (quizResults.length === 0) {
-                resultsBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No submissions yet</td></tr>';
-            } else {
-                resultsBody.innerHTML = '';
-                quizResults.forEach(result => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${result.studentName}</td>
-                        <td>${result.rollNumber}</td>
-                        <td>${result.subject}</td>
-                        <td>${result.score}</td>
-                        <td>${result.maxScore}</td>
-                        <td>${result.timeSpent}</td>
-                        <td>${new Date(result.timestamp).toLocaleString()}</td>
-                        <td><span class="status completed">Completed</span></td>
-                    `;
-                    resultsBody.appendChild(row);
-                });
+                
+                const results = await response.json();
+                
+                // Load from localStorage (fallback)
+                const localResults = JSON.parse(localStorage.getItem('localQuizResults') || '[]');
+                const allResults = [...results, ...localResults];
+                
+                if (allResults.length === 0) {
+                    showNoResults();
+                } else {
+                    displayResults(allResults);
+                    updateStats(allResults);
+                }
+                
+                updateLastUpdated();
+                
+            } catch (error) {
+                console.error('Error loading results:', error);
+                showError();
             }
-            
-            // Update stats
-            updateStats();
         }
-        
-        // Update statistics
-        function updateStats() {
-            if (quizResults.length === 0) {
-                totalStudentsEl.textContent = '0';
-                totalSubmissionsEl.textContent = '0';
-                averageScoreEl.textContent = '0';
-                averageTimeEl.textContent = '00:00';
-                return;
-            }
+
+        function displayResults(results) {
+            const tableBody = document.getElementById('results-body');
+            tableBody.innerHTML = '';
             
-            // Count unique students
-            const uniqueStudents = new Set(quizResults.map(r => r.rollNumber));
-            totalStudentsEl.textContent = uniqueStudents.size;
+            // Sort by timestamp (newest first)
+            results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             
-            // Total submissions
-            totalSubmissionsEl.textContent = quizResults.length;
+            results.forEach(result => {
+                const row = document.createElement('tr');
+                
+                // Calculate percentage for color coding
+                const percentage = (parseFloat(result.score) / parseFloat(result.maxScore)) * 100;
+                let scoreClass = 'score-medium';
+                if (percentage >= 80) scoreClass = 'score-high';
+                if (percentage < 60) scoreClass = 'score-low';
+                
+                // Get subject class
+                const subjectClass = getSubjectClass(result.subject);
+                
+                row.innerHTML = `
+                    <td>${result.studentName}</td>
+                    <td>${result.rollNumber}</td>
+                    <td><span class="subject-badge ${subjectClass}">${result.subject}</span></td>
+                    <td class="score-cell ${scoreClass}">${result.score}/${result.maxScore}</td>
+                    <td>${result.timeSpent}</td>
+                    <td>${formatDateTime(result.timestamp)}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            showResultsTable();
+        }
+
+        function updateStats(results) {
+            // Total quizzes
+            document.getElementById('total-quizzes').textContent = results.length;
+            
+            // Total unique students
+            const uniqueStudents = new Set(results.map(r => r.rollNumber));
+            document.getElementById('total-students').textContent = uniqueStudents.size;
             
             // Average score
-            const totalScore = quizResults.reduce((sum, result) => sum + parseFloat(result.score), 0);
-            const avgScore = totalScore / quizResults.length;
-            averageScoreEl.textContent = avgScore.toFixed(2);
+            if (results.length > 0) {
+                const totalScore = results.reduce((sum, result) => sum + parseFloat(result.score), 0);
+                const totalMaxScore = results.reduce((sum, result) => sum + parseFloat(result.maxScore), 0);
+                const averagePercentage = ((totalScore / totalMaxScore) * 100).toFixed(1);
+                document.getElementById('average-score').textContent = `${averagePercentage}%`;
+            }
             
-            // Average time (in seconds for calculation)
-            const totalSeconds = quizResults.reduce((sum, result) => {
-                const timeParts = result.timeSpent.split(':');
-                return sum + (parseInt(timeParts[0]) * 60) + parseInt(timeParts[1]);
-            }, 0);
-            
-            const avgSeconds = totalSeconds / quizResults.length;
-            const minutes = Math.floor(avgSeconds / 60);
-            const seconds = Math.floor(avgSeconds % 60);
-            averageTimeEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            // Latest quiz
+            if (results.length > 0) {
+                const latest = results[0];
+                document.getElementById('latest-quiz').textContent = 
+                    `${latest.studentName} - ${latest.subject}`;
+            }
         }
-        
-        // Show notification for new submission
-        function showNotification() {
-            notificationEl.style.display = 'block';
-            setTimeout(() => {
-                notificationEl.style.display = 'none';
-            }, 3000);
+
+        function getSubjectClass(subject) {
+            if (subject.includes('Python')) return 'subject-python';
+            if (subject.includes('Data')) return 'subject-ds';
+            if (subject.includes('OOP')) return 'subject-oopm';
+            if (subject.includes('C/CPP')) return 'subject-cpp';
+            return '';
         }
-        
-        // Add a new submission
-        function addSubmission(result) {
-            quizResults.unshift(result); // Add to beginning of array
-            localStorage.setItem('quizResults', JSON.stringify(quizResults));
-            updateDashboard();
-            showNotification();
+
+        function formatDateTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleString();
         }
-        
-        // Simulate a new submission (for demo purposes)
-        function simulateNewSubmission() {
-            const subjects = ['Python', 'Java', 'Web Development'];
-            const names = ['Rajesh Kumar', 'Priya Sharma', 'Amit Patel', 'Sneha Gupta', 'Vikram Singh'];
-            
-            const newResult = {
-                studentName: names[Math.floor(Math.random() * names.length)],
-                rollNumber: `0246IT24MT${Math.floor(Math.random() * 50).toString().padStart(2, '0')}`,
-                subject: subjects[Math.floor(Math.random() * subjects.length)],
-                score: (4 + Math.random()).toFixed(2),
-                maxScore: '4.65',
-                timeSpent: `${Math.floor(Math.random() * 5).toString().padStart(2, '0')}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
-                timestamp: new Date().toISOString(),
-                checksum: Math.random().toString(36).substring(2, 10)
-            };
-            
-            addSubmission(newResult);
+
+        function updateLastUpdated() {
+            const now = new Date();
+            document.getElementById('last-updated').textContent = 
+                `Last updated: ${now.toLocaleTimeString()}`;
         }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('no-results').style.display = 'none';
+            document.getElementById('results-table').style.display = 'none';
+        }
+
+        function showResultsTable() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('no-results').style.display = 'none';
+            document.getElementById('results-table').style.display = 'block';
+        }
+
+        function showError() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('no-results').style.display = 'none';
+            document.getElementById('results-table').style.display = 'none';
+        }
+
+        function showNoResults() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('no-results').style.display = 'block';
+            document.getElementById('results-table').style.display = 'none';
+        }
+
+        // Load results when page loads
+        document.addEventListener('DOMContentLoaded', loadResults);
         
-        // Add Abhishek's submission when the page loads
-        window.addEventListener('load', () => {
-            // Add Abhishek's result
-            const abhishekResult = {
-                studentName: "Abhishek",
-                rollNumber: "0246IT24MT06",
-                subject: "Python",
-                score: "4.65",
-                maxScore: "4.65",
-                timeSpent: "00:18",
-                timestamp: "2025-08-23T04:56:00.533Z",
-                checksum: "QWJoaXNoZWsw"
-            };
-            
-            addSubmission(abhishekResult);
-            initDashboard();
-        });
+        // Auto-refresh every 30 seconds
+        setInterval(loadResults, 30000);
     </script>
 </body>
 </html>
