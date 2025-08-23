@@ -1,263 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baderia Global Institute of Engineering and Management- Quiz Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 600px;
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        
-        .header h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-        
-        .logo {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-        
-        .logo-circle {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #fdbb2d, #b21f1f);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 23px;
-            font-weight: bold;
-            border: 4px solid white;
-        }
-        
-        .login-form {
-            padding: 25px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #2c3e50;
-        }
-        
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus, .form-group select:focus {
-            border-color: #1a2a6c;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(26, 42, 108, 0.2);
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin-top: 10px;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-        
-        .info {
-            text-align: center;
-            margin-top: 20px;
-            color: #7f8c8d;
-            font-size: 14px;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 15px;
-            background-color: #f8f9fa;
-            color: #7f8c8d;
-            font-size: 14px;
-            border-top: 1px solid #e9ecef;
-        }
-        
-        @media (max-width: 576px) {
-            .header h1 {
-                font-size: 20px;
-            }
-            
-            .header h2 {
-                font-size: 16px;
-            }
-            
-            .form-group input, .form-group select {
-                padding: 12px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baderia Global Institute of Engineering and Management - Quiz Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .container {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 600px;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    .header h1 { font-size: 24px; margin-bottom: 5px; font-weight: 600; }
+    .header h2 { font-size: 18px; margin-bottom: 15px; font-weight: 500; }
+    .logo { display: flex; justify-content: center; margin-bottom: 15px; }
+    .logo-circle {
+      width: 100px; height: 100px;
+      background: linear-gradient(135deg, #fdbb2d, #b21f1f);
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      color: white; font-size: 23px; font-weight: bold;
+      border: 4px solid white;
+    }
+    .login-form { padding: 25px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #2c3e50; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 14px;
+      border: 2px solid #ddd; border-radius: 8px;
+      font-size: 16px; transition: border-color 0.3s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #1a2a6c; outline: none;
+      box-shadow: 0 0 0 2px rgba(26, 42, 108, 0.2);
+    }
+    .submit-btn {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+      color: white; border: none; border-radius: 8px;
+      font-size: 18px; font-weight: 600;
+      cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;
+      margin-top: 10px;
+    }
+    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+    .submit-btn:active { transform: translateY(0); }
+    .info { text-align: center; margin-top: 20px; color: #7f8c8d; font-size: 14px; }
+    .footer {
+      text-align: center; padding: 15px;
+      background-color: #f8f9fa; color: #7f8c8d;
+      font-size: 14px; border-top: 1px solid #e9ecef;
+    }
+    @media (max-width: 576px) {
+      .header h1 { font-size: 20px; }
+      .header h2 { font-size: 16px; }
+      .form-group input, .form-group select { padding: 12px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <div class="logo-circle">BGIEM</div>
-            </div>
-            <h1>Baderia Global Institute of Engineering and Management, Jabalpur</h1>
-            <h2>Department of Computer Science and Engineering</h2>
-        </div>
-        
-        <div class="login-form">
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="studentName"><i class="fas fa-user"></i> Name of the Student</label>
-                    <input type="text" id="studentName" placeholder="Enter your full name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="rollNumber"><i class="fas fa-id-card"></i> Roll Number</label>
-                    <input type="text" id="rollNumber" placeholder="Enter your roll number" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="subject"><i class="fas fa-book"></i> Select Subject</label>
-                    <select id="subject" required>
-                        <option value="">-- Choose Subject --</option>
-                        <option value="Python">Python Programming</option>
-                        <option value="DS">Data Structures</option>
-                        <option value="OOPM">Object Oriented Programming</option>
-                        <option value="C/CPP">C/CPP Programming</option>
-                        
-                    </select>
-                </div>
-                
-                <button type="submit" class="submit-btn">Start Quiz <i class="fas fa-arrow-right"></i></button>
-            </form>
-            
-            <div class="info">
-                <p><i class="fas fa-info-circle"></i> Please ensure all details are correct before submitting</p>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>&copy; 2025 Baderia Global Institute of Engineering and Management- Computer Science & Engineering Department</p>
-        </div>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-circle">BGIEM</div>
+      </div>
+      <h1>Baderia Global Institute of Engineering and Management, Jabalpur</h1>
+      <h2>Department of Computer Science and Engineering</h2>
     </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const studentName = document.getElementById('studentName').value;
-            const rollNumber = document.getElementById('rollNumber').value;
-            const subject = document.getElementById('subject').value;
-            
-            if (!studentName || !rollNumber || !subject) {
-                alert('Please fill all fields before proceeding.');
-                return;
-            }
-            
-            // Store user data in sessionStorage
-            sessionStorage.setItem('studentName', studentName);
-            sessionStorage.setItem('rollNumber', rollNumber);
-            sessionStorage.setItem('subject', subject);
-            
-            // Redirect to quiz page based on subject selection
-            switch(subject) {
-                case 'Python':
-                    window.location.href = 'pythonquiz.html';
-                    break;
-                case 'DS':
-                    window.location.href = 'dsquiz.html';
-                    break;
-                case 'OOPM':
-                    window.location.href = 'oopmquiz.html';
-                    break;
-                case 'C/CPP':
-                    window.location.href = 'cppquiz.html';
-                    break;
-                default:
-                    alert('Please select a subject.');
-            }
-        });
-        
-        // Simple animation for input fields
-        const inputs = document.querySelectorAll('input, select');
-        inputs.forEach(input => {
-            input.addEventListener('focus', () => {
-                input.parentElement.style.transform = 'translateY(-5px)';
-                input.parentElement.style.transition = 'transform 0.3s';
-            });
-            
-            input.addEventListener('blur', () => {
-                input.parentElement.style.transform = 'translateY(0)';
-            });
-        });
-    </script>
+    <div class="login-form">
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="studentName"><i class="fas fa-user"></i> Name of the Student</label>
+          <input type="text" id="studentName" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="rollNumber"><i class="fas fa-id-card"></i> Roll Number</label>
+          <input type="text" id="rollNumber" placeholder="Enter your roll number" required>
+        </div>
+
+        <div class="form-group">
+          <label for="branch"><i class="fas fa-graduation-cap"></i> Branch</label>
+          <select id="branch" required>
+            <option value="">-- Select Branch --</option>
+            <option value="CSE">CSE</option>
+            <option value="CS">CS</option>
+            <option value="AIML">AIML</option>
+            <option value="Data Science">Data Science</option>
+            <option value="IoT">IoT</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="semester"><i class="fas fa-layer-group"></i> Semester</label>
+          <select id="semester" required>
+            <option value="">-- Select Semester --</option>
+            <option value="I">I</option>
+            <option value="II">II</option>
+            <option value="III">III</option>
+            <option value="IV">IV</option>
+            <option value="V">V</option>
+            <option value="VI">VI</option>
+            <option value="VII">VII</option>
+            <option value="VIII">VIII</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="section"><i class="fas fa-users"></i> Section</label>
+          <select id="section" required>
+            <option value="">-- Select Section --</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="NA">NA</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="subject"><i class="fas fa-book"></i> Select Subject</label>
+          <select id="subject" required>
+            <option value="">-- Choose Subject --</option>
+            <option value="Python">Python Programming</option>
+            <option value="DS">Data Structures</option>
+            <option value="OOPM">Object Oriented Programming</option>
+            <option value="C/CPP">C/CPP Programming</option>
+          </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Start Quiz <i class="fas fa-arrow-right"></i></button>
+      </form>
+
+      <div class="info">
+        <p><i class="fas fa-info-circle"></i> Please ensure all details are correct before submitting</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 Baderia Global Institute of Engineering and Management - Computer Science & Engineering Department</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const studentName = document.getElementById('studentName').value;
+      const rollNumber = document.getElementById('rollNumber').value;
+      const branch = document.getElementById('branch').value;
+      const semester = document.getElementById('semester').value;
+      const section = document.getElementById('section').value;
+      const subject = document.getElementById('subject').value;
+
+      if (!studentName || !rollNumber || !branch || !semester || !section || !subject) {
+        alert('Please fill all fields before proceeding.');
+        return;
+      }
+
+      // Store user data in sessionStorage
+      sessionStorage.setItem('studentName', studentName);
+      sessionStorage.setItem('rollNumber', rollNumber);
+      sessionStorage.setItem('branch', branch);
+      sessionStorage.setItem('semester', semester);
+      sessionStorage.setItem('section', section);
+      sessionStorage.setItem('subject', subject);
+
+      // Redirect to quiz page based on subject selection
+      switch(subject) {
+        case 'Python': window.location.href = 'pythonquiz.html'; break;
+        case 'DS': window.location.href = 'dsquiz.html'; break;
+        case 'OOPM': window.location.href = 'oopmquiz.html'; break;
+        case 'C/CPP': window.location.href = 'cppquiz.html'; break;
+        default: alert('Please select a subject.');
+      }
+    });
+
+    // Simple animation for input fields
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.parentElement.style.transform = 'translateY(-5px)';
+        input.parentElement.style.transition = 'transform 0.3s';
+      });
+      input.addEventListener('blur', () => {
+        input.parentElement.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
 </body>
 </html>
