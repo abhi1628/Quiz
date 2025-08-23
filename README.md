@@ -1,4 +1,4 @@
-# Quiz System - Baderia Global Institute
+# Quiz System - Baderia Global Institute of Engineering and Management
 
 A comprehensive online quiz system for the Department of Computer Science and Engineering at Baderia Global Institute of Engineering and Management, Jabalpur.
 
@@ -20,7 +20,7 @@ A comprehensive online quiz system for the Department of Computer Science and En
 
 ## How to Use
 
-1. Open `login.html` in a web browser
+1. Open `index.html` in a web browser
 2. Enter your name and roll number
 3. Select the subject you want to take a quiz on
 4. Click "Start Quiz" to begin
